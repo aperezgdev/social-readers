@@ -3,7 +3,7 @@ package comment_vo
 type CommentContent string
 
 func NewCommentContent(commentContent string) CommentContent {
-	return NewCommentContent(commentContent)
+	return CommentContent(commentContent)
 }
 
 func (cc CommentContent) Validate() bool {
