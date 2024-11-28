@@ -16,8 +16,8 @@ type PostRecentFinder struct {
 func NewPostRecentFinder(
 	slog *slog.Logger,
 	postRepository repository.PostRepository,
-) *PostRecentFinder {
-	return &PostRecentFinder{
+) PostRecentFinder {
+	return PostRecentFinder{
 		slog,
 		postRepository,
 	}

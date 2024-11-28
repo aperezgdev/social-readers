@@ -20,8 +20,8 @@ func NewCommentFinderByPost(
 	slog *slog.Logger,
 	commentRepository repository.CommentRepository,
 	postRepository repository.PostRepository,
-) *CommentFinderByPost {
-	return &CommentFinderByPost{
+) CommentFinderByPost {
+	return CommentFinderByPost{
 		slog:              slog,
 		commentRepository: commentRepository,
 		postFinder:        finder.NewPostFinder(slog, postRepository),

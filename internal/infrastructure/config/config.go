@@ -17,10 +17,16 @@ const (
 )
 
 type Config struct {
-	ServerPort   string
-	Env          Environment
-	ReadTimeout  time.Duration
-	WriteTimeout time.Duration
+	ServerPort       string
+	Env              Environment
+	DatabaseUrl      string
+	DatabaseName     string
+	DatabaseHost     string
+	DatabasePort     string
+	DatabaseUser     string
+	DatabasePassword string
+	ReadTimeout      time.Duration
+	WriteTimeout     time.Duration
 }
 
 func NewConfig(slog *slog.Logger) Config {
@@ -43,9 +49,14 @@ func NewConfig(slog *slog.Logger) Config {
 	}
 
 	return Config{
-		ServerPort:   os.Getenv("SERVER_PORT"),
-		Env:          Environment(os.Getenv("ENV")),
-		ReadTimeout:  time.Duration(readTimeoutN) * time.Second,
-		WriteTimeout: time.Duration(writeTimeoutN) * time.Second,
+		ServerPort:       os.Getenv("SERVER_PORT"),
+		Env:              Environment(os.Getenv("ENV")),
+		DatabaseName:     os.Getenv("DB_NAME"),
+		DatabaseHost:     os.Getenv("DB_HOST"),
+		DatabaseUrl:      "postgres://" + os.Getenv("DB_USER") + ":" + os.Getenv("DB_PASSWORD") + "@" + os.Getenv("DB_HOST") + ":" + os.Getenv("DB_PORT") + "/" + os.Getenv("DB_NAME"),
+		DatabaseUser:     os.Getenv("DB_USER"),
+		DatabasePassword: os.Getenv("DB_PASSWORD"),
+		ReadTimeout:      time.Duration(readTimeoutN) * time.Second,
+		WriteTimeout:     time.Duration(writeTimeoutN) * time.Second,
 	}
 }

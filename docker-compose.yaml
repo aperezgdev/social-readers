@@ -1,0 +1,30 @@
+services:
+  api:
+    container_name: social-readers
+    image: social-readers
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+
+  db:
+    container_name: ${DB_NAME}
+    image: postgres:alpine3.20
+    ports:
+      - ${PORT_DB}:${PORT_DB}
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB:  ${DB_NAME}
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-db:
+    external: false

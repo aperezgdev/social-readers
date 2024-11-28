@@ -22,8 +22,8 @@ func NewCommentCreator(
 	commentRepository repository.CommentRepository,
 	userRepository repository.UserRepository,
 	postRepository repository.PostRepository,
-) *CommentCreator {
-	return &CommentCreator{
+) CommentCreator {
+	return CommentCreator{
 		slog,
 		commentRepository,
 		finder.NewUserFinder(slog, userRepository),
