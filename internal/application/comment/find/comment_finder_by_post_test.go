@@ -32,7 +32,7 @@ func setupTest() *testSuite {
 	return &testSuite{
 		mockPostRepository:    &mockPostRepository,
 		mockCommentRepository: &mockCommentRepository,
-		comentFinderByPost:    commentFinderByPost,
+		comentFinderByPost:    &commentFinderByPost,
 	}
 }
 

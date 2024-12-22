@@ -37,7 +37,7 @@ func setupTest() *testSuite {
 		commentRepository: mockCommentRepo,
 		userRepository:    mockUserRepo,
 		postRepository:    mockPostRepo,
-		commentCreator:    creator,
+		commentCreator:    &creator,
 	}
 }
 

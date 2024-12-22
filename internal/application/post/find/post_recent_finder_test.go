@@ -24,7 +24,7 @@ func setupSuite() *testSuite {
 
 	return &testSuite{
 		mockPostRepository,
-		*postRecentFinder,
+		postRecentFinder,
 	}
 }
 
