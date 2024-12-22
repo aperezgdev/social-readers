@@ -12,6 +12,47 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const getBooksToReadByUser = `-- name: GetBooksToReadByUser :many
+SELECT 
+  id,
+  isbn,
+  title,
+  description,
+  picture,
+  userId,
+  createdAt
+FROM booksToRead
+WHERE userId = $1
+`
+
+func (q *Queries) GetBooksToReadByUser(ctx context.Context, userid pgtype.UUID) ([]Bookstoread, error) {
+	rows, err := q.db.Query(ctx, getBooksToReadByUser, userid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Bookstoread
+	for rows.Next() {
+		var i Bookstoread
+		if err := rows.Scan(
+			&i.ID,
+			&i.Isbn,
+			&i.Title,
+			&i.Description,
+			&i.Picture,
+			&i.Userid,
+			&i.Createdat,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const saveBooksToRead = `-- name: SaveBooksToRead :exec
 INSERT INTO booksToRead (
   id,

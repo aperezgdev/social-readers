@@ -5,9 +5,13 @@ import (
 	"log/slog"
 	"os"
 
+	create_book_recommended "github.com/aperezgdev/social-readers-api/internal/application/book_recommended/create"
+	finder_book_recommended "github.com/aperezgdev/social-readers-api/internal/application/book_recommended/finder"
+	"github.com/aperezgdev/social-readers-api/internal/application/book_to_read/create"
+	finder "github.com/aperezgdev/social-readers-api/internal/application/book_to_read/find"
 	create_comment "github.com/aperezgdev/social-readers-api/internal/application/comment/create"
 	finder_comment "github.com/aperezgdev/social-readers-api/internal/application/comment/find"
-	"github.com/aperezgdev/social-readers-api/internal/application/post/create"
+	create_post "github.com/aperezgdev/social-readers-api/internal/application/post/create"
 	finder_post "github.com/aperezgdev/social-readers-api/internal/application/post/find"
 	create_user "github.com/aperezgdev/social-readers-api/internal/application/user/create"
 	finder_user "github.com/aperezgdev/social-readers-api/internal/domain/use_case/user"
@@ -34,17 +38,25 @@ func Run() error {
 	userRepository := repository.NewUserRepository(queries)
 	commentRepository := repository.NewCommentRepository(queries)
 	postRepository := repository.NewPostPostgresRepository(queries)
+	bookRecommendedRepository := repository.NewBookRecommendedRepository(queries)
+	bookToReadRepository := repository.NewBookToReadRepository(queries)
 
 	userCreator := create_user.NewUserCreator(logger, userRepository)
 	userFinder := finder_user.NewUserFinder(logger, userRepository)
 	commentCreator := create_comment.NewCommentCreator(logger, commentRepository, userRepository, postRepository)
 	commentFinderByPost := finder_comment.NewCommentFinderByPost(logger, commentRepository, postRepository)
-	postCreator := create.NewPostCreator(logger, postRepository, userRepository)
+	postCreator := create_post.NewPostCreator(logger, postRepository, userRepository)
 	postFinderRecent := finder_post.NewPostRecentFinder(logger, postRepository)
+	bookRecommendedCreator := create_book_recommended.NewBookRecommendedCreator(logger, bookRecommendedRepository, userRepository)
+	bookRecommendedFinderByUser := finder_book_recommended.NewBookRecommendedFinderByUser(logger, bookRecommendedRepository)
+	bookToReadFinderByUser := finder.NewBookToReadFinderByUser(logger, bookToReadRepository)
+	bookToReadCreator := create.NewBookToReadCreator(logger, bookToReadRepository, userRepository)
 
 	userController := controller.NewUserController(userCreator, userFinder)
 	commentController := controller.NewCommentController(commentCreator, commentFinderByPost)
 	postController := controller.NewPostController(postCreator, postFinderRecent)
+	bookRecommendedController := controller.NewBookRecommendedController(bookRecommendedFinderByUser, bookRecommendedCreator)
+	bookToReadController := controller.NewBookToReadsController(bookToReadFinderByUser, bookToReadCreator)
 
 	httpServer := server.NewHttpServer(logger, conf)
 	httpServer.AddHandler("/health", healthController.GetHealth)
@@ -54,6 +66,10 @@ func Run() error {
 	httpServer.AddHandler("POST /posts", postController.PostPost)
 	httpServer.AddHandler("/posts/{postId}/comments", commentController.GetCommentByPost)
 	httpServer.AddHandler("POST /comments", commentController.PostComment)
+	httpServer.AddHandler("/users/{userId}/book-recommended", bookRecommendedController.GetBookRecommendedByUser)
+	httpServer.AddHandler("POST /book-recommended", bookRecommendedController.PostBookRecommended)
+	httpServer.AddHandler("/users/{userId}/book-to-read", bookToReadController.GetBooksToReadByUser)
+	httpServer.AddHandler("POST /book-to-read", bookToReadController.PostBookToRead)
 
 	return httpServer.Start()
 }

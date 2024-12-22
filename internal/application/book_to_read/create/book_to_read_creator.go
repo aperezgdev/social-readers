@@ -19,8 +19,8 @@ func NewBookToReadCreator(
 	slog *slog.Logger,
 	bookToReadRepository repository.BookToReadRepository,
 	userRepository repository.UserRepository,
-) *BookToReadCreator {
-	return &BookToReadCreator{
+) BookToReadCreator {
+	return BookToReadCreator{
 		slog:                 slog,
 		bookToReadRepository: bookToReadRepository,
 		userFinder:           finder.NewUserFinder(slog, userRepository),

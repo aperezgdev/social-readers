@@ -23,7 +23,7 @@ func setupSuite() *testSuite {
 
 	return &testSuite{
 		mockBookRecommendedRepository,
-		bookRecommendedFinderByUser,
+		&bookRecommendedFinderByUser,
 	}
 }
 

@@ -12,6 +12,47 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const getBooksRecommendedByUser = `-- name: GetBooksRecommendedByUser :many
+SELECT 
+  id,
+  isbn,
+  title,
+  description,
+  picture,
+  userId,
+  createdAt
+FROM booksRecommended
+WHERE userId = $1
+`
+
+func (q *Queries) GetBooksRecommendedByUser(ctx context.Context, userid pgtype.UUID) ([]Booksrecommended, error) {
+	rows, err := q.db.Query(ctx, getBooksRecommendedByUser, userid)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Booksrecommended
+	for rows.Next() {
+		var i Booksrecommended
+		if err := rows.Scan(
+			&i.ID,
+			&i.Isbn,
+			&i.Title,
+			&i.Description,
+			&i.Picture,
+			&i.Userid,
+			&i.Createdat,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const saveBooksRecommended = `-- name: SaveBooksRecommended :exec
 INSERT INTO booksRecommended (
   id,

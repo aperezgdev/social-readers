@@ -27,7 +27,7 @@ func setupTest() *testSuite {
 
 	return &testSuite{
 		mockCommentRepository: &mockBookToReadRepository,
-		bookToReadFinderByUser: bookToReadFinderByUser,
+		bookToReadFinderByUser: &bookToReadFinderByUser,
 	}
 }
 

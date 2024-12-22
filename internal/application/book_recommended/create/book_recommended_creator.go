@@ -19,8 +19,8 @@ func NewBookRecommendedCreator(
 	slog *slog.Logger,
 	bookRecommendedRepository repository.BookRecommendedRepository,
 	userRepository repository.UserRepository,
-) *BookRecommendedCreator {
-	return &BookRecommendedCreator{
+) BookRecommendedCreator {
+	return BookRecommendedCreator{
 		slog:                      slog,
 		bookRecommendedRepository: bookRecommendedRepository,
 		userFinder:                finder.NewUserFinder(slog, userRepository),

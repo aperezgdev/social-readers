@@ -32,7 +32,7 @@ func setupTest() *testSuite {
 	return &testSuite{
 		mockBookToReadRepository,
 		mockUserRepository,
-		bookToReadCreator,
+		&bookToReadCreator,
 	}
 }
 

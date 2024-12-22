@@ -17,8 +17,8 @@ type BookRecommendedFinderByUser struct {
 func NewBookRecommendedFinderByUser(
 	slog *slog.Logger,
 	bookRecommendedRepository repository.BookRecommendedRepository,
-) *BookRecommendedFinderByUser {
-	return &BookRecommendedFinderByUser{
+) BookRecommendedFinderByUser {
+	return BookRecommendedFinderByUser{
 		slog:                     slog,
 		bookRecommendedRepository: bookRecommendedRepository,
 	}

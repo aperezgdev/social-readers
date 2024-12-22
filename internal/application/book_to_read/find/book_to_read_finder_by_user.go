@@ -17,8 +17,8 @@ type BookToReadFinderByUser struct {
 func NewBookToReadFinderByUser(
 	slog *slog.Logger,
 	bookToReadRepository repository.BookToReadRepository,
-) *BookToReadFinderByUser {
-	return &BookToReadFinderByUser{
+) BookToReadFinderByUser {
+	return BookToReadFinderByUser{
 		slog:                 slog,
 		bookToReadRepository: bookToReadRepository,
 	}

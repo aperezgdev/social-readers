@@ -3,9 +3,12 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/aperezgdev/social-readers-api/internal/application/book_recommended/create"
 	"github.com/aperezgdev/social-readers-api/internal/application/book_recommended/finder"
+	"github.com/aperezgdev/social-readers-api/internal/domain/models"
+	"github.com/aperezgdev/social-readers-api/pkg"
 )
 
 type BookRecommendedController struct {
@@ -14,6 +17,16 @@ type BookRecommendedController struct {
 }
 
 type bookRecommendedRequest struct {
+	Isbn        string `json:"isbn"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Picture     string `json:"picture"`
+	UserId      string `json:"userId"`
+}
+
+type bookRecommendedResponse struct {
+	CreatedAt 	time.Time `json:"createdAt"`
+	Id 			string `json:"id"`
 	Isbn        string `json:"isbn"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
@@ -39,7 +52,19 @@ func (controller *BookRecommendedController) GetBookRecommendedByUser(w http.Res
 		return
 	}
 
-	if err := json.NewEncoder(w).Encode(bookRecommendeds); err != nil {
+	response := pkg.Map(bookRecommendeds, func(b models.BookRecommended) bookRecommendedResponse {
+		return bookRecommendedResponse{
+			CreatedAt: time.Time(b.CreatedAt),
+			Id: string(b.Id),
+			Isbn: string(b.Isbn),
+			Title: string(b.Title),
+			Description: string(b.Description),
+			Picture: string(b.Picture),
+			UserId: string(b.UserId),
+		}
+	})
+
+	if err := json.NewEncoder(w).Encode(response); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
