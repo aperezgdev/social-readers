@@ -13,5 +13,9 @@ func NewHealthController() HealthController {
 }
 
 func (HealthController) GetHealth(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("OK"))
+	_, err := w.Write([]byte("OK"))
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+	}
 }

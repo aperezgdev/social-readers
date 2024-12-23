@@ -38,7 +38,5 @@ func (bc *BookToReadCreator) Run(
 
 	bookToRead := models.NewBookToRead(isbn, title, description, userId, picture)
 
-	bc.bookToReadRepository.Save(ctx, bookToRead)
-
-	return nil
+	return bc.bookToReadRepository.Save(ctx, bookToRead)
 }
