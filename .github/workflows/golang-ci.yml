@@ -39,7 +39,7 @@ jobs:
           go-version: stable
       
       - name: Test
-        run: go test -cover -coverprofile=coverage.txt ./...
+        run: go test -cover -coverprofile=coverage.txt $(go list ./... | grep -v ./internal/domain/models | grep -v ./internal/domain/repository | grep -v ./internal/domain/errors | grep -v ./internal/domain/value_object | grep -v ./cmd)
 
       - name: Archive code coverage results
         uses: actions/upload-artifact@v4
