@@ -12,6 +12,9 @@ var (
 	FormatInvalidad = func(field string) ValidationError {
 		return New(field, "Format is not valid")
 	}
+	InvalidUUID = func (field string) ValidationError  {
+		return New(field, "UUID format is not valid")
+	}
 )
 
 type ValidationError struct {
