@@ -1,15 +1,23 @@
 package user_vo
 
-import "net/mail"
+import (
+	"net/mail"
+
+	"github.com/aperezgdev/social-readers-api/internal/domain/errors"
+)
 
 type UserMail string
 
-func NewUserMail(userMail string) UserMail {
-	return UserMail(userMail)
+func NewUserMail(userMail string) (UserMail, error) {
+	return UserMail(userMail), validateMail(userMail)
 }
 
-func (um UserMail) Validate() bool {
+func validateMail(um string) error {
 	_, err := mail.ParseAddress(string(um))
 
-	return err == nil
+	if err != nil {
+		return errors.FormatInvalidad("Mail")
+	}
+
+	return nil
 }

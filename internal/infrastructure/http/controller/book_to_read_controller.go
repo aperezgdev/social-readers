@@ -70,11 +70,13 @@ func (controller *BookToReadController) PostBookToRead(w http.ResponseWriter, r 
 	err := json.NewDecoder(r.Body).Decode(&bookToReadRequest)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
 	err = controller.bookToReadCreator.Run(r.Context(), bookToReadRequest.Isbn, bookToReadRequest.Title, bookToReadRequest.Description, bookToReadRequest.Picture, bookToReadRequest.UserId)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		writeError(w, err)
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)

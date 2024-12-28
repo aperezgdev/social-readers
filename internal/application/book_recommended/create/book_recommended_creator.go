@@ -31,12 +31,26 @@ func (br *BookRecommendedCreator) Run(
 	ctx context.Context,
 	isbn, title, description, picture, userId string,
 ) error {
-	_, err := br.userFinder.Run(ctx, userId)
-	if err != nil {
-		return err
+	br.slog.Info(
+		"BookRecommendedCreator - Run - Params into: ",
+		slog.Any("isbn", isbn),
+		slog.Any("title", title),
+		slog.Any("description", description),
+		slog.Any("userId", userId),
+		slog.Any("picture", picture),
+	)
+
+	bookRecommended, validationError := models.NewBookRecommended(isbn, title, description, userId, picture)
+	if validationError != nil {
+		br.slog.Info("BookRecommendedCreator - Run - Validation error: ", slog.Any("error", validationError))
+		return validationError
 	}
 
-	bookRecommended := models.NewBookRecommended(isbn, title, description, userId, picture)
+	_, err := br.userFinder.Run(ctx, userId)
+	if err != nil {
+		br.slog.Info("BookRecommendedCreator - Run - User not found: ", slog.Any("error", err))
+		return err
+	}
 
 	return br.bookRecommendedRepository.Save(ctx, bookRecommended)
 }

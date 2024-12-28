@@ -24,7 +24,12 @@ func (uc UserCreator) Run(ctx context.Context, name, mail, picture string) error
 		slog.Any("mail", mail),
 		slog.Any("picture", picture),
 	)
-	user := models.NewUser(name, picture, mail)
+	user, err := models.NewUser(name, picture, mail)
+
+	if err != nil {
+		uc.slog.Info("UserCreator - Run - Validation error: ", slog.Any("error", err))
+		return err
+	}
 
 	return uc.userRepository.Save(ctx, user)
 }

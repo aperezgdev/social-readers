@@ -32,6 +32,12 @@ func NewCommentCreator(
 }
 
 func (cc *CommentCreator) Run(ctx context.Context, content, postId, commentedBy string) error {
+	comment, validationError := models.NewComment(content, postId, commentedBy)
+	if validationError != nil {
+		cc.slog.Info("CommentCreator - Run - Validation error: ", slog.Any("error", validationError))
+		return validationError
+	}
+	
 	cc.slog.Info(
 		"CommentCreator - Run - Params into: ",
 		slog.Any("content", content),
@@ -49,8 +55,6 @@ func (cc *CommentCreator) Run(ctx context.Context, content, postId, commentedBy 
 		cc.slog.Info("CommentCreator - Run - Post not exists")
 		return errPost
 	}
-
-	comment := models.NewComment(content, postId, commentedBy)
 
 	return cc.commentRepository.Save(ctx, comment)
 }

@@ -43,7 +43,7 @@ func (uc CommentController) PostComment(w http.ResponseWriter, r *http.Request) 
 
 	err = uc.commentCreator.Run(r.Context(), commentRequest.Content, commentRequest.PostId, commentRequest.CommentBy)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		writeError(w, err)
 	}
 
 	w.WriteHeader(http.StatusCreated)
