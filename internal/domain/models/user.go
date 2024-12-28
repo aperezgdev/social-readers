@@ -15,14 +15,23 @@ type User struct {
 	CreatedAt   shared_vo.CreatedAt
 }
 
-func NewUser(name, picture, mail string) User {
+func NewUser(name, picture, mail string) (User, error) {
+	nameVO, errName := NewUserName(name)
+	if errName != nil {
+		return User{}, errName
+	}
+	mailVO, errMail := NewUserMail(mail)
+	if errMail != nil {
+		return User{}, errMail
+	}
+
 	return User{
 		Id:          NewUserId(),
-		Name:        NewUserName(name),
+		Name:        nameVO,
 		Picture:     NewUserPicture(picture),
 		Description: NewUserDescription(),
 		Followers:   NewUserFollower(),
-		Mail:        NewUserMail(mail),
+		Mail:        mailVO,
 		CreatedAt:   shared_vo.NewCreatedAt(),
-	}
+	}, nil
 }
