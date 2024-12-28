@@ -60,8 +60,10 @@ func TestGetBookRecommended(t *testing.T) {
 		suite.bookRecommendedController.GetBookRecommendedByUser(w, r)
 
 		var response []map[string]string
-		json.Unmarshal(w.Body.Bytes(), &response)
-
+		errUnmarshal := json.Unmarshal(w.Body.Bytes(), &response)
+		if errUnmarshal != nil {
+			t.Fatal(errUnmarshal)
+		}
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Equal(t, "1", response[0]["id"])
 	})

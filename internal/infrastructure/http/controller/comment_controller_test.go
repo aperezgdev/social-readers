@@ -63,8 +63,11 @@ func TestGet(t *testing.T) {
 
 		setupSuite.commentController.GetCommentByPost(w, r)
 		var response []map[string]string
-   		json.Unmarshal(w.Body.Bytes(), &response)
-
+   		errUnmarshal := json.Unmarshal(w.Body.Bytes(), &response)
+		if errUnmarshal != nil {
+			t.Fatal(errUnmarshal)
+		}
+		
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Equal(t, 1, len(response))
 		assert.Equal(t, "1", response[0]["id"])
