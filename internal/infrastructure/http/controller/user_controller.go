@@ -2,12 +2,9 @@ package controller
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/aperezgdev/social-readers-api/internal/application/user/create"
-	domain_errors "github.com/aperezgdev/social-readers-api/internal/domain/errors"
 	finder "github.com/aperezgdev/social-readers-api/internal/domain/use_case/user"
 )
 
@@ -36,16 +33,17 @@ type userResponse struct {
 
 func (uc UserController) PostUser(w http.ResponseWriter, r *http.Request) {
 	var user userRequest
-	err := json.NewDecoder(r.Body).Decode(&user)
-	fmt.Println(user)
+	var err error
+	err = json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
 
-	errCreator := uc.userCreator.Run(r.Context(), user.Name, user.Mail, user.Picture)
-
-	if errCreator != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+	err = uc.userCreator.Run(r.Context(), user.Name, user.Mail, user.Picture)
+	if err != nil {
+		writeError(w, err)
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
@@ -55,12 +53,9 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 
 	user, err := uc.userFinder.Run(r.Context(), id)
-	if errors.Is(err, domain_errors.ErrNotExistPost) {
-		w.WriteHeader(http.StatusNotFound)
-	}
-
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		writeError(w, err)
+		return
 	}
 
 	if err := json.NewEncoder(w).Encode(userResponse{
@@ -71,5 +66,6 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request) {
 		Mail:        string(user.Mail),
 	}); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 }

@@ -48,7 +48,7 @@ func (controller *BookRecommendedController) GetBookRecommendedByUser(w http.Res
 	userId := r.PathValue("userId")
 	bookRecommendeds, err := controller.bookRecommendedFinderByUser.Run(r.Context(), userId)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		writeError(w, err)
 		return
 	}
 
@@ -82,7 +82,7 @@ func (controller *BookRecommendedController) PostBookRecommended(w http.Response
 
 	err = controller.bookRecommendedCreator.Run(r.Context(), bookRecommendedRequest.Isbn, bookRecommendedRequest.Title, bookRecommendedRequest.Description, bookRecommendedRequest.Picture, bookRecommendedRequest.UserId)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		writeError(w, err)
 		return
 	}
 

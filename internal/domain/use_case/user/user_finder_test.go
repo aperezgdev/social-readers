@@ -20,7 +20,7 @@ var (
 )
 
 func Test_exist_user(t *testing.T) {
-	userExpected := models.NewUser("John", "picture", "john@doe.com")
+	userExpected, _ := models.NewUser("John", "picture", "john@doe.com")
 	mockUserRepository.On("Find", mock.Anything, mock.Anything).
 		Once().
 		Return(userExpected, nil)
@@ -32,7 +32,7 @@ func Test_exist_user(t *testing.T) {
 }
 
 func Test_non_exist_user(t *testing.T) {
-	userExpected := models.NewUser("John", "picture", "john@doe.com")
+	userExpected, _ := models.NewUser("John", "picture", "john@doe.com")
 	mockUserRepository.On("Find", mock.Anything, mock.Anything).
 		Once().
 		Return(userExpected, errors.ErrNotExistUser)

@@ -52,6 +52,7 @@ func (pc PostController) GetPost(w http.ResponseWriter, r *http.Request) {
 	posts, err := pc.postRecentFinder.Run(r.Context())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	postsResponse := pkg.Map(posts, func(p models.Post) postResponse {
