@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/mock"
 
 	"github.com/aperezgdev/social-readers-api/internal/application/user/create"
+	"github.com/aperezgdev/social-readers-api/internal/domain/errors"
 	"github.com/aperezgdev/social-readers-api/internal/domain/repository"
 )
 
@@ -41,15 +42,13 @@ func TestUserCreation(t *testing.T) {
 		suite.userRepository.AssertExpectations(t)
 	})
 
-	// You can add more test cases here as needed, for example:
-	/*
-		t.Run("should fail with invalid email", func(t *testing.T) {
-			suite := setupTest()
+	t.Run("should return validation error cause invalidad user name", func(t *testing.T) {
+		suite := setupTest()
+		err := suite.userCreator.Run(context.Background(), " ", "john@doe.com", "picture")
 
-			err := suite.userCreator.Run(context.Background(), "John Doe", "invalid-email", "picture")
-
-			assert.Error(t, err)
-			suite.userRepository.AssertNotCalled(t, "Save")
-		})
-	*/
+		assert.NotNil(t, err)
+		validationError, ok := err.(errors.ValidationError)
+		assert.True(t, ok)
+		assert.Equal(t, "Name", validationError.Field)
+	})
 }

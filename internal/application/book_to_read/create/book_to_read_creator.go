@@ -29,14 +29,28 @@ func NewBookToReadCreator(
 
 func (bc *BookToReadCreator) Run(
 	ctx context.Context,
-	isbn, title, description, userId, picture string,
+	isbn, title, description, picture, userId string,
 ) error {
-	_, err := bc.userFinder.Run(ctx, userId)
-	if err != nil {
-		return err
+	bc.slog.Info(
+		"BookToReadCreator - Run - Params into: ",
+		slog.Any("isbn", isbn),
+		slog.Any("title", title),
+		slog.Any("description", description),
+		slog.Any("userId", userId),
+		slog.Any("picture", picture),
+	)
+
+	bookToRead, validationError := models.NewBookToRead(isbn, title, description, picture, userId)
+	if validationError != nil {
+		bc.slog.Info("BookToReadCreator - Run - Validation error: ", slog.Any("error", validationError))
+		return validationError
 	}
 
-	bookToRead := models.NewBookToRead(isbn, title, description, userId, picture)
+	_, err := bc.userFinder.Run(ctx, userId)
+	if err != nil {
+		bc.slog.Info("BookToReadCreator - Run - User not found: ", slog.Any("error", err))
+		return err
+	}
 
 	return bc.bookToReadRepository.Save(ctx, bookToRead)
 }

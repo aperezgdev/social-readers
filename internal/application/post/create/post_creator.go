@@ -30,13 +30,17 @@ func NewPostCreator(
 func (pc PostCreator) Run(ctx context.Context, comment, postedBy string) error {
 	pc.slog.Info("PostCreator - Run - Params into: ", slog.Any("comment", comment))
 
+	post, errValidation := models.NewPost(comment, postedBy)
+	if errValidation != nil {
+		pc.slog.Info("PostCreator - Run - Validation error: ", slog.Any("error", errValidation))
+		return errValidation
+	}
+
 	_, err := pc.userFinder.Run(ctx, postedBy)
 	if err != nil {
 		pc.slog.Info("PostCreator - Run - User not exists")
 		return err
 	}
-
-	post := models.NewPost(comment, postedBy)
 
 	return pc.postRepository.Save(ctx, post)
 }

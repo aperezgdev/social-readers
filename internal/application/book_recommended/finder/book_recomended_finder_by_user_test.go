@@ -50,4 +50,17 @@ func TestBookRecommendedSelection(t *testing.T) {
 		assert.Equal(t, 1, len(bookRecommendeds))
 		suite.mockBookRecommendedRepository.AssertExpectations(t)
 	})
+
+	t.Run("should return error when repository fails", func(t *testing.T) {
+		suite := setupSuite()
+
+		suite.mockBookRecommendedRepository.On("FindByUser", mock.Anything, mock.Anything).
+			Return([]models.BookRecommended{}, assert.AnError)
+
+		bookRecommendeds, err := suite.bookRecommendedFinderByUser.Run(context.Background(), "1")
+
+		assert.NotNil(t, err)
+		assert.Nil(t, bookRecommendeds)
+		suite.mockBookRecommendedRepository.AssertExpectations(t)
+	})
 }
