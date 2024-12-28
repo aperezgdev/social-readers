@@ -57,13 +57,7 @@ func TestGetUser(t *testing.T) {
 		w := httptest.NewRecorder()
 		userController.GetUser(w, r)
 		
-		var response map[string]string
-   		errUnmarshal := json.Unmarshal(w.Body.Bytes(), &response)
-		if errUnmarshal != nil {
-			t.Fatal(errUnmarshal)
-		}
-
-		assert.Empty(t, response)
+		assert.Empty(t, w.Body)
 		assert.Equal(t, http.StatusNotFound, w.Code)
 	})
 
@@ -76,13 +70,7 @@ func TestGetUser(t *testing.T) {
 		w := httptest.NewRecorder()
 		userController.GetUser(w, r)
 
-		var response map[string]string
-   		errUnmarshal := json.Unmarshal(w.Body.Bytes(), &response)
-		if errUnmarshal != nil {
-			t.Fatal(errUnmarshal)
-		}
-		
-		assert.Empty(t, response)
+		assert.Empty(t, w.Body)
 		assert.Equal(t, http.StatusInternalServerError, w.Code)
 	})
 }
