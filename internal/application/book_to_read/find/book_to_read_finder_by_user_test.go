@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"testing"
 
-	finder "github.com/aperezgdev/social-readers-api/internal/application/book_to_read/finder"
+	finder "github.com/aperezgdev/social-readers-api/internal/application/book_to_read/find"
 	"github.com/aperezgdev/social-readers-api/internal/domain/models"
 	"github.com/aperezgdev/social-readers-api/internal/domain/repository"
 	"github.com/stretchr/testify/assert"

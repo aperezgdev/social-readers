@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/aperezgdev/social-readers-api/internal/application/book_to_read/create"
-	finder "github.com/aperezgdev/social-readers-api/internal/application/book_to_read/finder"
+	finder "github.com/aperezgdev/social-readers-api/internal/application/book_to_read/find"
 	"github.com/aperezgdev/social-readers-api/internal/domain/errors"
 	"github.com/aperezgdev/social-readers-api/internal/domain/models"
 	"github.com/aperezgdev/social-readers-api/internal/domain/repository"

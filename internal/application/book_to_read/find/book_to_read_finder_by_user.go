@@ -28,8 +28,15 @@ func (bf *BookToReadFinderByUser) Run(
 	ctx context.Context,
 	userId string,
 ) ([]models.BookToRead, error) {
+	bf.slog.Info(
+		"BookToReadFinderByUser - Run - Params into: ",
+		slog.Any("userId", userId),
+	)
+
 	bookToReads, err := bf.bookToReadRepository.FindByUser(ctx, user_vo.UserId(userId))
 	if err != nil {
+		bf.slog.Info(
+			"BookToReadFinderByUser - Run - Error: ")
 		return nil, err
 	}
 
