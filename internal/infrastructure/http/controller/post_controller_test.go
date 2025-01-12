@@ -87,7 +87,7 @@ func TestPostPost(t *testing.T) {
 		if errUuid != nil {
 			t.Fatal(errUuid)
 		}
-		json := []byte(fmt.Sprintf(`{"comment":"comment","postedBy":"%s"}`, uuid.String()))
+		json := []byte(fmt.Sprintf(`{"comment":"comment", "isbn": "978-6-6795-0881-8", "postedBy":"%s"}`, uuid.String()))
 
 		r := httptest.NewRequest(http.MethodPost, "/post", bytes.NewBuffer(json))
 		w := httptest.NewRecorder()
@@ -107,7 +107,7 @@ func TestPostPost(t *testing.T) {
 		if errUuid != nil {
 			t.Fatal(errUuid)
 		}
-		json := []byte(fmt.Sprintf(`{"comment":"comment","postedBy":"%s"}`, uuid.String()))
+		json := []byte(fmt.Sprintf(`{"comment":"comment", "isbn": "978-6-6795-0881-8", "postedBy":"%s"}`, uuid.String()))
 
 		r := httptest.NewRequest(http.MethodPost, "/post", bytes.NewBuffer(json))
 		w := httptest.NewRecorder()

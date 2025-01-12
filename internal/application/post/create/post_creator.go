@@ -27,10 +27,10 @@ func NewPostCreator(
 	}
 }
 
-func (pc PostCreator) Run(ctx context.Context, comment, postedBy string) error {
+func (pc PostCreator) Run(ctx context.Context, comment, isbn, postedBy string) error {
 	pc.slog.Info("PostCreator - Run - Params into: ", slog.Any("comment", comment))
 
-	post, errValidation := models.NewPost(comment, postedBy)
+	post, errValidation := models.NewPost(comment, isbn, postedBy)
 	if errValidation != nil {
 		pc.slog.Info("PostCreator - Run - Validation error: ", slog.Any("error", errValidation))
 		return errValidation

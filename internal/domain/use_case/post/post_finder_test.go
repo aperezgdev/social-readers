@@ -20,7 +20,7 @@ var (
 )
 
 func Test_exist_post(t *testing.T) {
-	postExpected, _ := models.NewPost("comment", "1")
+	postExpected, _ := models.NewPost("comment", "1", "978-6-6795-0881-8")
 	mockPostRepository.On("Find", mock.Anything, mock.Anything).Once().Return(postExpected, nil)
 
 	post, err := postFinder.Run(context.Background(), string(postExpected.Id))
@@ -29,7 +29,7 @@ func Test_exist_post(t *testing.T) {
 }
 
 func Test_non_exist_post(t *testing.T) {
-	postExpected, _ := models.NewPost("comment", "1")
+	postExpected, _ := models.NewPost("comment", "1", "978-6-6795-0881-8")
 	mockPostRepository.On("Find", mock.Anything, mock.Anything).
 		Once().
 		Return(postExpected, errors.ErrNotExistPost)

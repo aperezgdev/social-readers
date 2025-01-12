@@ -13,6 +13,7 @@ import (
 
 type postRequest struct {
 	Comment  string `json:"comment"`
+	Isbn		 string `json:"isbn"`
 	PostedBy string `json:"postedBy"`
 }
 
@@ -40,7 +41,7 @@ func (pc PostController) PostPost(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	errCreator := pc.postCreator.Run(r.Context(), post.Comment, post.PostedBy)
+	errCreator := pc.postCreator.Run(r.Context(), post.Comment, post.Isbn,post.PostedBy)
 	if errCreator != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}

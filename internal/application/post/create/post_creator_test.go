@@ -35,7 +35,7 @@ func Test_create_valid_post(t *testing.T) {
 		}
 		mockPostRepository.On("Save", mock.Anything, mock.Anything).Once().Return(nil)
 		mockUserRepository.On("Find", mock.Anything, mock.Anything).Once().Return(models.User{}, nil)
-		err := postCreator.Run(context.Background(), "Amazing book!", uuid.String())
+		err := postCreator.Run(context.Background(), "Amazing book!", "978-6-6795-0881-8", uuid.String())
 
 		assert.Nil(t, err)
 	})
@@ -48,13 +48,13 @@ func Test_create_valid_post(t *testing.T) {
 		mockUserRepository.On("Find", mock.Anything, mock.Anything).
 		Once().
 		Return(models.User{}, errors.ErrNotExistUser)
-		err := postCreator.Run(context.Background(), "Amazing book!", uuid.String())
+		err := postCreator.Run(context.Background(), "Amazing book!", "978-6-6795-0881-8", uuid.String())
 
 		assert.ErrorIs(t, err, errors.ErrNotExistUser)
 	})
 
 	t.Run("should return a validation error on invalid post", func(t *testing.T) {
-		err := postCreator.Run(context.Background(), "Amazing book!", "1")
+		err := postCreator.Run(context.Background(), "Amazing book!", "978-6-6795-0881-8","1")
 		validationError, ok := err.(errors.ValidationError)
 		assert.True(t, ok)
 		assert.Equal(t, "postedBy", validationError.Field)

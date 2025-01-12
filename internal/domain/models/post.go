@@ -10,14 +10,20 @@ import (
 type Post struct {
 	Id        PostId
 	Comment   PostComment
+	Isbn 			shared_vo.Isbn
 	PostedBy  user_vo.UserId
 	CreatedAt shared_vo.CreatedAt
 }
 
-func NewPost(comment, postedBy string) (Post, error) {
+func NewPost(comment, isbn, postedBy string) (Post, error) {
 	commentVO, err :=  NewPostComment(comment)
 	if err != nil {
 		return Post{}, err
+	}
+
+	isbnVO, isbnError := shared_vo.NewIsbn(isbn)
+	if isbnError != nil {
+		return Post{}, isbnError
 	}
 
 	validError := pkg.ValidUUID(postedBy, "postedBy")
@@ -28,6 +34,7 @@ func NewPost(comment, postedBy string) (Post, error) {
 	return Post{
 		Id:        NewPostId(),
 		Comment:   commentVO,
+		Isbn: isbnVO,
 		PostedBy:  user_vo.UserId(postedBy),
 		CreatedAt: shared_vo.NewCreatedAt(),
 	}, nil
