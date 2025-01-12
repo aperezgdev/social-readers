@@ -25,8 +25,13 @@ func NewBookRecommendedFinderByUser(
 }
 
 func (bf *BookRecommendedFinderByUser) Run(ctx context.Context, userId string) ([]models.BookRecommended, error) {
+	bf.slog.Info(
+		"BookRecommendedFinderByUser - Run - Params into: ",
+		slog.Any("userId", userId),
+	)
 	bookRecommendeds, err := bf.bookRecommendedRepository.FindByUser(ctx, user_vo.UserId(userId))
 	if err != nil {
+		bf.slog.Info("BookRecommendedFinderByUser - Run - Error: ", slog.Any("error", err))
 		return nil, err
 	}
 

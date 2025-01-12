@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/aperezgdev/social-readers-api/internal/application/book_recommended/create"
-	"github.com/aperezgdev/social-readers-api/internal/application/book_recommended/finder"
+	finder "github.com/aperezgdev/social-readers-api/internal/application/book_recommended/find"
 	"github.com/aperezgdev/social-readers-api/internal/domain/models"
 	"github.com/aperezgdev/social-readers-api/pkg"
 )

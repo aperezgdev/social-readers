@@ -6,7 +6,7 @@ import (
 	"os"
 
 	create_book_recommended "github.com/aperezgdev/social-readers-api/internal/application/book_recommended/create"
-	finder_book_recommended "github.com/aperezgdev/social-readers-api/internal/application/book_recommended/finder"
+	finder_book_recommended "github.com/aperezgdev/social-readers-api/internal/application/book_recommended/find"
 	"github.com/aperezgdev/social-readers-api/internal/application/book_to_read/create"
 	finder "github.com/aperezgdev/social-readers-api/internal/application/book_to_read/find"
 	create_comment "github.com/aperezgdev/social-readers-api/internal/application/comment/create"
